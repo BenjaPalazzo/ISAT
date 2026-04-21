@@ -12,7 +12,7 @@ def resolver_url_corta(url: str) -> str:
     """Sigue redirects y devuelve la URL final expandida."""
     try:
         with httpx.Client(follow_redirects=True, timeout=5) as client:
-            response = client.head(url)
+            response = client.get(url)
             return str(response.url)
     except Exception as e:
         logger.warning(f"No se pudo resolver la URL '{url}': {e}")
@@ -43,6 +43,11 @@ def parsear_ubicacion_texto(texto: str) -> tuple[float, float] | None:
 
     # OpenStreetMap: #map=z/lat/lon
     m = re.search(r"#map=\d+/(-?\d+\.?\d*)/(-?\d+\.?\d*)", texto)
+    if m:
+        return float(m.group(1)), float(m.group(2))
+
+    # Google Maps: /search/lat,+lon (URLs resueltas de maps.app.goo.gl)
+    m = re.search(r"/search/(-?\d+\.?\d*),\+?(-?\d+\.?\d*)", texto)
     if m:
         return float(m.group(1)), float(m.group(2))
 

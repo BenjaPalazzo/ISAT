@@ -32,6 +32,7 @@ async def consultar_imagenes(
     }
 
 
+
 async def consultar_deformacion(
     lat: float,
     lon: float,
