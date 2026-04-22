@@ -3,12 +3,14 @@ from telegram import Update, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, ConversationHandler
 
 
+
 from config import (
     logger,
     ESPERANDO_UBICACION,
     ESPERANDO_FECHA_INICIO,
     ESPERANDO_FECHA_FIN,
     EJEMPLO_FECHA,
+    ESPERANDO_VELOCIDAD,
 )
 from utils import extraer_ubicacion_de_texto, parsear_fecha, validar_rango_fechas
 from api import consultar_imagenes, consultar_deformacion
@@ -60,8 +62,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Usá los siguientes comandos:\n"
         "📷 /imagenes    → Solicitar imágenes SAR de una zona\n"
         "📉 /deformacion → Analizar deformación del terreno\n"
-        "ℹ️ /ayuda        → Ver esta ayuda \n"
-        "🔚 /end     → Finalizar proceso"
+        "🔀 /velocidad   → Analizar la velocidad de deformación del terreno \n"
+        "ℹ️ /ayuda       → Ver esta ayuda \n"
+        "🔚 /end         → Finalizar proceso"
     )
     await update.message.reply_text(texto, parse_mode="Markdown")
 
@@ -110,6 +113,14 @@ async def cmd_deformacion(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=ReplyKeyboardRemove(),
     )
     return ESPERANDO_UBICACION
+
+
+async def cmd_velocidad(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    context.user_data["modo"] = "velocidad"
+    await update.message.reply_text(
+      "Estamos trabajando en tu petición"
+    )
+    return ESPERANDO_VELOCIDAD
 
 
 # ──────────────────────────────────────────────
@@ -221,6 +232,12 @@ async def recibir_fecha_fin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await _procesar_consulta(update, context)
     return ConversationHandler.END
 
+
+async def mensaje_velocidad(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    context.user_data.clear()
+    await update.message.reply_text(
+        "Estamos trabajando en tu petición"
+    )
 
 async def fin(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data.clear()

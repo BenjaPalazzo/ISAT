@@ -15,6 +15,7 @@ TOKEN = os.getenv("TOKEN")
 ESPERANDO_UBICACION    = 1
 ESPERANDO_FECHA_INICIO = 2
 ESPERANDO_FECHA_FIN    = 3
+ESPERANDO_VELOCIDAD = 4
 
 # ──────────────────────────────────────────────
 # FORMATO DE FECHA ESPERADO

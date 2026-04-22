@@ -6,7 +6,7 @@ from telegram.ext import (
     filters,
 )
 
-from config import TOKEN, logger, ESPERANDO_UBICACION, ESPERANDO_FECHA_INICIO, ESPERANDO_FECHA_FIN
+from config import TOKEN, logger, ESPERANDO_UBICACION, ESPERANDO_FECHA_INICIO, ESPERANDO_FECHA_FIN, ESPERANDO_VELOCIDAD
 from handlers import (
     fin,
     start,
@@ -14,11 +14,13 @@ from handlers import (
     mensaje_generico,
     cmd_imagenes,
     cmd_deformacion,
+    cmd_velocidad,
     recibir_ubicacion,
     recibir_ubicacion_texto,
     recibir_fecha_inicio,
     recibir_fecha_fin,
     cancelar,
+    mensaje_velocidad
 )
 
 
@@ -29,6 +31,7 @@ def main():
         entry_points=[
             CommandHandler("imagenes",    cmd_imagenes),
             CommandHandler("deformacion", cmd_deformacion),
+            CommandHandler("velocidad", cmd_velocidad),
         ],
         states={
             ESPERANDO_UBICACION: [
@@ -41,6 +44,9 @@ def main():
             ESPERANDO_FECHA_FIN: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, recibir_fecha_fin),
             ],
+            ESPERANDO_VELOCIDAD: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, mensaje_velocidad)
+            ]
         },
         fallbacks=[
             CommandHandler("cancelar", cancelar),
