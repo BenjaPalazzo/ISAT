@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+
+  isce:
+    image: python:3.11-slim
+    working_dir: /app
+    volumes:
+      - ./DockerPrueba:/app
+      - ./data:/data
+    command: >
+      bash -c "pip install numpy matplotlib -q &&
+               ls &&
+               python demo_mendoza.py"
+
+  mintpy:
+    build: ./DockerMintPy
+    working_dir: /data/copahue_stack
+    volumes:
+      - ./data:/data
+      - ./DockerMintPy:/config
+    depends_on:
+      - isce
+    command: >
+     bash -c "
+      cd /data/copahue_stack &&
+      smallbaselineApp.py /config/config.cfg"

@@ -1,14 +1,9 @@
 # ============================================================
 # Dockerfile – MintPy 1.6.2
-# Authors: Leonardo & Pablo Euillades (CEDIAC – UNCuyo / CONICET)
 # Base:    Ubuntu 22.04 LTS + Python 3.10
 # ============================================================
 
 FROM ubuntu:22.04
-
-LABEL maintainer="CEDIAC-UNCuyo"
-LABEL description="MintPy 1.6.2 – Miami InSAR Time-Series Software in Python"
-LABEL version="1.6.2"
 
 # ── Evitar prompts interactivos durante apt ──────────────────
 ENV DEBIAN_FRONTEND=noninteractive
@@ -44,7 +39,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-gdal \
     # HDF5
     libhdf5-dev \
-    python3-h5py \
     # FFTW (necesario para algunas rutinas de phase-unwrapping)
     libfftw3-dev \
     libfftw3-3 \
